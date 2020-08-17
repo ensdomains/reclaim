@@ -1,9 +1,9 @@
-import erc20Abi from "./abis/erc20.json";
-import ownableAbi from "./abis/ownable.json";
+import registrarAbi from "./abis/registrar.json";
+import registryAbi from "./abis/registry.json";
 
 const abis = {
-  erc20: erc20Abi,
-  ownable: ownableAbi,
+  registrar: registrarAbi,
+  registry: registryAbi,
 };
 
 export default abis;
