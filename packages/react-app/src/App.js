@@ -43,7 +43,7 @@ const registrarAddress = '0xA47b9D846D03E74C736D650dfb23D085C773AFCE'
 const registryAddress = '0x7F90FA6F67Aa366D8ca17d36a1B2E5A06C647151'
 function App() {
   const [provider, setProvider] = useState(false)
-  const [account, setAccount] = useState(false)
+  const [account, setAccount] = useState('')
   const [address, setAddress] = useState(false)
   const [connected, setConnected] = useState(false)
   const [message, setMessage] = useState(false)
@@ -56,6 +56,13 @@ function App() {
     const res = await signer.getAddress()
     setAddress(res)
     setAccount(res.toLowerCase())
+  }
+
+  const lookupName = async(provider, label) =>{
+    const signer = provider.getSigner()  
+    const registry = new Contract(registryAddress, abis.registry, provider);
+    const owner = await registry.owner(label)
+    console.log('Owner', {owner})
   }
 
   const releaseDeed = async(provider, label) =>{
@@ -107,8 +114,8 @@ function App() {
         <img src={imgData} className="App-logo" alt="react-logo" />
         {/* Remove the "display: none" style and open the JavaScript console in the browser to see what this function does */}
       <h2>Unclaimed deposit search</h2>
+      {!connected && (<span style={{color:'yellow', marginBottom:'5px'}}>Your browser is not connected to wallet (eg: Metamask)</span>)}
       <input onChange={handleInput} placeholder="Enter ENS name or Eth address" value={account}></input>
-      {!connected && (<span style={{color:'yellow'}}>Your browser is not connected to wallet (eg: Metamask)</span>)}
       {domains && (
           <>
             <div>has {domains.length} name{ domains.length === 1 ? '' : 's'} to claim deposit against</div>
@@ -140,7 +147,7 @@ function App() {
       }
       </header>
       <div className="App-body">
-        ddd
+        To find out more about, read this blog article.
       </div>
     </div>
   );
