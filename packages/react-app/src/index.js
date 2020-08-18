@@ -24,12 +24,8 @@ if (process.env.REACT_APP_STAGE === 'live'){
   registryAddress = '0x7F90FA6F67Aa366D8ca17d36a1B2E5A06C647151'
 }
 
-const client = new ApolloClient({
-  uri: reclaimUri,
-});
-const ensClient = new ApolloClient({
-  uri: ensUri
-});
+const client = new ApolloClient({ uri: reclaimUri });
+const ensClient = new ApolloClient({ uri: ensUri });
 
 ReactDOM.render(
   <ApolloProvider client={client} >
