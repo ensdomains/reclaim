@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Contract } from "@ethersproject/contracts";
 import { getDefaultProvider, JsonRpcProvider, Web3Provider } from "@ethersproject/providers";
+import { ethers } from "ethers";
+import namehash from 'eth-ens-namehash';
 import ApolloClient, { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 import { addresses, abis } from "@project/contracts";
@@ -20,6 +22,16 @@ query Account($account: String!){
 }
 `;
 
+const GET_STATS = gql`
+query {
+	statsEntity(id:""){
+    id
+    numOfDeeds
+    currentValue
+    accumValue
+  }
+}
+`
 
 const GET_ACCOUNTS = gql`
 query Account($account: String!){
@@ -45,24 +57,39 @@ function App() {
   const [provider, setProvider] = useState(false)
   const [account, setAccount] = useState('')
   const [address, setAddress] = useState(false)
+  const [value, setValue] = useState('')
   const [connected, setConnected] = useState(false)
   const [message, setMessage] = useState(false)
   const { data:accountData } = useQuery(GET_ACCOUNTS, {variables: { account }});
   const { data:labelData } = useQuery(GET_LABEL_NAME, {variables: { account }, client:ensClient});
-  const handleInput = (event)=>{
-    setAccount(event.target.value.toLowerCase())
-  }
+  const { data:{ statsEntity } = {} } = useQuery(GET_STATS);
   const checkAccount = async(signer) =>{
     const res = await signer.getAddress()
-    setAddress(res)
+    setAddress(res.toLowerCase())
+    setValue(res.toLowerCase())
     setAccount(res.toLowerCase())
   }
-
   const lookupName = async(provider, label) =>{
-    const signer = provider.getSigner()  
-    const registry = new Contract(registryAddress, abis.registry, provider);
-    const owner = await registry.owner(label)
-    console.log('Owner', {owner})
+    if (!label.match(/\.eth/)) return ""
+    let encoded, registry
+    try{
+      encoded = namehash.hash(label)
+      registry = new Contract(registryAddress, abis.registry, provider);
+      return await registry.owner(encoded)
+    }catch(e){
+      return false
+    }
+  }
+
+  const handleInput = async(event)=>{
+    let label = event.target.value.toLowerCase()
+    const name  = await lookupName(provider, label)
+    setValue(label.toLowerCase())
+    if(name === '0x0000000000000000000000000000000000000000'){
+      setAccount(label.toLowerCase())
+    }else{
+      setAccount(name.toLowerCase())
+    }
   }
 
   const releaseDeed = async(provider, label) =>{
@@ -93,7 +120,6 @@ function App() {
       }
     }
   }, [window, account, connected, address])
-
   const isOwner = (address && address.toLowerCase()) === (account && account.toLowerCase())
   let deeds = []
   if(accountData && accountData.account){
@@ -115,10 +141,11 @@ function App() {
         {/* Remove the "display: none" style and open the JavaScript console in the browser to see what this function does */}
       <h2>Unclaimed deposit search</h2>
       {!connected && (<span style={{color:'yellow', marginBottom:'5px'}}>Your browser is not connected to wallet (eg: Metamask)</span>)}
-      <input onChange={handleInput} placeholder="Enter ENS name or Eth address" value={account}></input>
+      <input onChange={handleInput} placeholder="Enter ENS name or ETH address" value={value} ></input>
       {domains && (
           <>
-            <div>has {domains.length} name{ domains.length === 1 ? '' : 's'} to claim deposit against</div>
+            <div style={{marginTop:'5px'}}>{account}</div>
+            {value && (<div>has {domains.length} name{ domains.length === 1 ? '' : 's'} to claim deposit against</div>)}
             <ul>
               {
                 domains.map((d) => {
@@ -147,7 +174,10 @@ function App() {
       }
       </header>
       <div className="App-body">
-        To find out more about, read this blog article.
+        { statsEntity && <>
+          There are currently {statsEntity.numOfDeeds} deeds holding {statsEntity.currentValue / Math.pow(10,18)} ETH <br/>
+          To understand more about these unclaimed deposits, <a href="">read the blog post</a>.
+        </>}
       </div>
     </div>
   );

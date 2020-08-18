@@ -33,9 +33,11 @@
 }
 
 input {
-  width: 500px;
+  width:80%;
   padding: 5px;
   font-size:inherit;
+  border-radius: 6px;
+  border: white;
 }
 
 button{
