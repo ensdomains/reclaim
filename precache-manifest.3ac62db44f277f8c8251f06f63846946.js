@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "9d80be726ecd20b9291dba3e3b5a482e",
+    "revision": "a91681f60cc9ec93389ec85ee357d1d9",
     "url": "/claim-deposit/index.html"
   },
   {
-    "revision": "98342ec35163d6f4bab5",
+    "revision": "b894c6e48b05866a2d05",
     "url": "/claim-deposit/static/css/main.96162d31.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/claim-deposit/static/js/2.93df4686.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "98342ec35163d6f4bab5",
-    "url": "/claim-deposit/static/js/main.38b70c66.chunk.js"
+    "revision": "b894c6e48b05866a2d05",
+    "url": "/claim-deposit/static/js/main.2c1e4f26.chunk.js"
   },
   {
     "revision": "251376746019391219a7",
