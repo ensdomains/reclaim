@@ -203,7 +203,7 @@ function App({
           There are currently {statsEntity.numOfDeeds} deeds holding {(statsEntity.currentValue / Math.pow(10,18)).toFixed(2)} ETH <br/>
           To understand more about these unclaimed deposits, <a href="https://medium.com/@makoto_inoue/how-to-get-back-the-unclaimed-deposit-1e2b1767b930">read the blog post</a>.
           <br/>
-          Made with <a href="https://github.com/PaulRBerg/create-eth-app">create-eth-app</a>
+          Bootstrapped with <a href="https://github.com/PaulRBerg/create-eth-app">Create Eth App</a>
         </>}
       </div>
     </div>
