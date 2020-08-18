@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Contract } from "@ethersproject/contracts";
 import { JsonRpcProvider, Web3Provider, InfuraProvider } from "@ethersproject/providers";
 import namehash from 'eth-ens-namehash';
+import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 import { abis } from "@project/contracts";
 import "./App.css";
