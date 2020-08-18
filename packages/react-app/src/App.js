@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Contract } from "@ethersproject/contracts";
-import { getDefaultProvider, JsonRpcProvider, Web3Provider } from "@ethersproject/providers";
+import { getDefaultProvider, JsonRpcProvider, Web3Provider, InfuraProvider } from "@ethersproject/providers";
 import { ethers } from "ethers";
 import namehash from 'eth-ens-namehash';
 import ApolloClient, { gql } from "apollo-boost";
@@ -70,13 +70,15 @@ function App() {
     setAccount(res.toLowerCase())
   }
   const lookupName = async(provider, label) =>{
-    if (!label.match(/\.eth/)) return ""
+    if (!label.match(/\.eth/)) return false
     let encoded, registry
     try{
       encoded = namehash.hash(label)
       registry = new Contract(registryAddress, abis.registry, provider);
-      return await registry.owner(encoded)
+      const res = await registry.owner(encoded)
+      return res
     }catch(e){
+      setMessage('Problem looking up the name')
       return false
     }
   }
@@ -85,7 +87,7 @@ function App() {
     let label = event.target.value.toLowerCase()
     const name  = await lookupName(provider, label)
     setValue(label.toLowerCase())
-    if(name === '0x0000000000000000000000000000000000000000'){
+    if(!name || name === '0x0000000000000000000000000000000000000000'){
       setAccount(label.toLowerCase())
     }else{
       setAccount(name.toLowerCase())
@@ -117,7 +119,10 @@ function App() {
         }
       }else{
         setConnected(true)
-      }
+      }  
+    }else{
+      // setProvider(new InfuraProvider())
+      setProvider(new JsonRpcProvider('http://localhost:8545'))
     }
   }, [window, account, connected, address])
   const isOwner = (address && address.toLowerCase()) === (account && account.toLowerCase())
