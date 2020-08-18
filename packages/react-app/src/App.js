@@ -51,7 +51,6 @@ query Account($account: String!){
 function App({
   ensClient, registrarAddress, registryAddress, stage
 }) {
-  console.log('app')
   const [provider, setProvider] = useState(false)
   const [account, setAccount] = useState('')
   const [network, setNetwork] = useState('')
@@ -157,22 +156,6 @@ function App({
       value:deed.value
     }
   })
-  if(!warning){
-    // if(connected && network !== 1){
-    //   setWarning('You are connected to the wrong network(only mainnet is supported)')
-    // }
-    // if(!connected){
-    //   setWarning('Your browser is not connected to wallet (eg: Metamask)')
-    // }else{
-    //   setWarning('')
-    // }
-  }else{
-    console.log('warning is already set')
-  }
-  console.log({connected, network})
-  // if(connected && warning){
-  //   setWarning(false)
-  // }
 
   return (
     <div className="App">
@@ -185,10 +168,12 @@ function App({
       {domains && (
           <>
             <div style={{marginTop:'5px'}}>{account}</div>
-            {value && (<div>owns { domains.length === 100 ? 'more than' : '' } {domains.length} name{ domains.length === 1 ? '' : 's'} to claim deposit against</div>)}
+            {value && (<div>owns { domains.length === 100 ? 'more than' : '' } {domains.length} name{ domains.length === 1 ? '' : 's'} to claim deposit</div>)}
             <ul>
               {
                 domains.map((d) => {
+                  console.log('**domains', {d})
+
                   const displayName = d.name ? `${d.name}.eth` : `${d.labelhash && d.labelhash.slice(0,5)}...`
                   return(
                     <li>

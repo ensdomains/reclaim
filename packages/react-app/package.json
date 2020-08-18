@@ -1,6 +1,7 @@
 {
   "name": "@project/react-app",
   "version": "1.0.0",
+  "homepage": "https://makoto.github.io/claim-deposit",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -46,5 +47,8 @@
     "eject": "react-scripts eject",
     "start": "react-scripts start",
     "test": "react-scripts test"
+  },
+  "devDependencies": {
+    "gh-pages": "^3.1.0"
   }
 }
