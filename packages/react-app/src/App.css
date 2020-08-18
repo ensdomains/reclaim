@@ -50,3 +50,6 @@ button{
   margin-left:1em;
   vertical-align:'middle';
 }
+ul {
+  list-style-type: none;
+}

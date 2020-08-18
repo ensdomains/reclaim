@@ -48,18 +48,18 @@ query Account($account: String!){
 }
 `
 
-const ensClient = new ApolloClient({
-  uri: "http://127.0.0.1:8000/subgraphs/name/graphprotocol/ens"
-});
-const registrarAddress = '0xA47b9D846D03E74C736D650dfb23D085C773AFCE'
-const registryAddress = '0x7F90FA6F67Aa366D8ca17d36a1B2E5A06C647151'
-function App() {
+function App({
+  ensClient, registrarAddress, registryAddress, stage
+}) {
+  console.log('app')
   const [provider, setProvider] = useState(false)
   const [account, setAccount] = useState('')
+  const [network, setNetwork] = useState('')
   const [address, setAddress] = useState(false)
   const [value, setValue] = useState('')
   const [connected, setConnected] = useState(false)
   const [message, setMessage] = useState(false)
+  const [warning, setWarning] = useState(false)
   const { data:accountData } = useQuery(GET_ACCOUNTS, {variables: { account }});
   const { data:labelData } = useQuery(GET_LABEL_NAME, {variables: { account }, client:ensClient});
   const { data:{ statsEntity } = {} } = useQuery(GET_STATS);
@@ -69,7 +69,7 @@ function App() {
     setValue(res.toLowerCase())
     setAccount(res.toLowerCase())
   }
-  const lookupName = async(provider, label) =>{
+  const lookupName = async(provider, label) => {
     if (!label.match(/\.eth/)) return false
     let encoded, registry
     try{
@@ -107,6 +107,11 @@ function App() {
     await ethereum.request({ method: 'eth_requestAccounts' })
   }
   
+  const checkNetwork = async(provider) => {
+    let ret = provider && await provider.getNetwork()
+    setNetwork(ret.chainId)
+  }
+
   let signer
   useEffect(() => {
     if (window && window.ethereum) {
@@ -121,10 +126,23 @@ function App() {
         setConnected(true)
       }  
     }else{
-      // setProvider(new InfuraProvider())
-      setProvider(new JsonRpcProvider('http://localhost:8545'))
+      if(stage === 'live'){
+        setProvider(new InfuraProvider())
+      }else{
+        setProvider(new JsonRpcProvider('http://localhost:8545'))
+      }
     }
-  }, [window, account, connected, address])
+    checkNetwork(provider)
+    if(connected){
+      if(network !== 1){
+        setWarning('You are connected to the wrong network(only mainnet is supported)')
+      }else{
+        setWarning(false)
+      }
+    }else{
+      setWarning('Your browser is not connected to wallet (eg: Metamask)')
+    }
+  }, [window, account, connected, address, network, warning])
   const isOwner = (address && address.toLowerCase()) === (account && account.toLowerCase())
   let deeds = []
   if(accountData && accountData.account){
@@ -139,22 +157,39 @@ function App() {
       value:deed.value
     }
   })
+  if(!warning){
+    // if(connected && network !== 1){
+    //   setWarning('You are connected to the wrong network(only mainnet is supported)')
+    // }
+    // if(!connected){
+    //   setWarning('Your browser is not connected to wallet (eg: Metamask)')
+    // }else{
+    //   setWarning('')
+    // }
+  }else{
+    console.log('warning is already set')
+  }
+  console.log({connected, network})
+  // if(connected && warning){
+  //   setWarning(false)
+  // }
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={imgData} className="App-logo" alt="react-logo" />
         {/* Remove the "display: none" style and open the JavaScript console in the browser to see what this function does */}
       <h2>Unclaimed deposit search</h2>
-      {!connected && (<span style={{color:'yellow', marginBottom:'5px'}}>Your browser is not connected to wallet (eg: Metamask)</span>)}
+      {warning && (<span style={{color:'yellow', marginBottom:'5px'}}>{warning}</span>)}
       <input onChange={handleInput} placeholder="Enter ENS name or ETH address" value={value} ></input>
       {domains && (
           <>
             <div style={{marginTop:'5px'}}>{account}</div>
-            {value && (<div>has {domains.length} name{ domains.length === 1 ? '' : 's'} to claim deposit against</div>)}
+            {value && (<div>owns { domains.length === 100 ? 'more than' : '' } {domains.length} name{ domains.length === 1 ? '' : 's'} to claim deposit against</div>)}
             <ul>
               {
                 domains.map((d) => {
-                  const displayName = d.name || `${d.labelhash && d.labelhash.slice(0,5)}...`
+                  const displayName = d.name ? `${d.name}.eth` : `${d.labelhash && d.labelhash.slice(0,5)}...`
                   return(
                     <li>
                       <span>{displayName} has {d.value / Math.pow(10,18)} ETH deposit</span>
@@ -170,7 +205,7 @@ function App() {
                 })
               }
             </ul>
-            <span style={{width:"60%", marginBottom:"1em"}}>{message}</span>
+            <span style={{width:"60%", marginBottom:"1em", color:"yellow"}}>{message}</span>
             {domains.length > 0 && !isOwner ? (
               <span style={{width:"60%", marginBottom:"1em"}}>To claim back the deposit, you need to connect to the wallet which auctioned off the names</span>
             ): ''}
@@ -180,7 +215,7 @@ function App() {
       </header>
       <div className="App-body">
         { statsEntity && <>
-          There are currently {statsEntity.numOfDeeds} deeds holding {statsEntity.currentValue / Math.pow(10,18)} ETH <br/>
+          There are currently {statsEntity.numOfDeeds} deeds holding {(statsEntity.currentValue / Math.pow(10,18)).toFixed(2)} ETH <br/>
           To understand more about these unclaimed deposits, <a href="">read the blog post</a>.
         </>}
       </div>
