@@ -155,7 +155,7 @@ function App({
       value:(deed.value / Math.pow(10,18))
     }
   })
-  const sum = domains.map(d => d.value).reduce((a,b)=> parseInt(a)+parseInt(b), 0)
+  const sum = domains.map(d => d.value).reduce((a,b)=> parseFloat(a)+parseFloat(b), 0)
   return (
     <div className="App">
       <header className="App-header">
@@ -167,7 +167,7 @@ function App({
       {domains && (
           <>
             <div style={{marginTop:'5px'}}>{account}</div>
-            {value && (<div>owns { domains.length === 100 ? 'more than' : '' } {domains.length} (worth {sum} ETH) name{ domains.length === 1 ? '' : 's'} to claim deposit</div>)}
+            {value && (<div>owns { domains.length === 100 ? 'more than' : '' } {domains.length} (worth {sum.toFixed(2)} ETH) name{ domains.length === 1 ? '' : 's'} to claim deposit</div>)}
             <ul>
               {
                 domains.map((d) => {
