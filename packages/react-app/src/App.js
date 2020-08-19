@@ -174,7 +174,7 @@ function App({
       <header className="App-header">
         <img src={imgData} className="App-logo" alt="react-logo" />
       <h2>Unclaimed deposit search</h2>
-      {warning && (<span style={{color:'yellow', marginBottom:'5px'}}>{warning}</span>)}
+      {warning ? (<span style={{color:'yellow', marginBottom:'5px'}}>{warning}</span>) : (<span>&nbsp;</span>)}
       <input onChange={handleInput} placeholder="Enter ENS name or ETH address" value={value} ></input>
       {domains && (
           <>
