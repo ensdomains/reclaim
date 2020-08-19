@@ -1,7 +1,6 @@
 {
   "name": "@project/monorepo",
   "version": "1.0.0",
-  "homepage": "https://reclaim.ens.domains",
   "keywords": [
     "ethereum",
     "react",
@@ -11,7 +10,7 @@
   "private": true,
   "scripts": {
     "react-app:build": "REACT_APP_STAGE=live yarn workspace @project/react-app build",
-    "react-app:publish": "yarn gh-pages -d packages/react-app/build",
+    "react-app:publish": "echo 'reclaim.ens.domains' > packages/react-app/build/CNAME && yarn gh-pages -d packages/react-app/build",
     "react-app:deploy": "yarn react-app:build && yarn react-app:publish",
     "react-app:start": "yarn workspace @project/react-app start",
     "react-app:start:live": "REACT_APP_STAGE=live yarn workspace @project/react-app start"
