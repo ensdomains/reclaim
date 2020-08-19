@@ -189,11 +189,11 @@ function App({
                     <>
                       <span>{displayName} has {d.value.toFixed(2)} ETH deposit</span>
                       {
-                        connected && isOwner && (
+                        connected && isOwner ? (
                           <button onClick={() => releaseDeed(provider, d.labelhash)} >
                             Claim
                           </button>
-                        )
+                        ) : (<span></span>)
                       }
                     </>      
                   )
