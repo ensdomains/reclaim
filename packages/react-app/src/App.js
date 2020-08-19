@@ -173,7 +173,6 @@ function App({
     <div className="App">
       <header className="App-header">
         <img src={imgData} className="App-logo" alt="react-logo" />
-        {/* Remove the "display: none" style and open the JavaScript console in the browser to see what this function does */}
       <h2>Unclaimed deposit search</h2>
       {warning && (<span style={{color:'yellow', marginBottom:'5px'}}>{warning}</span>)}
       <input onChange={handleInput} placeholder="Enter ENS name or ETH address" value={value} ></input>
@@ -181,26 +180,26 @@ function App({
           <>
             <div style={{marginTop:'5px'}}>{account}</div>
             {value && (<div>owns { domains.length === 100 ? 'more than' : '' } {domains.length} (worth {sum.toFixed(2)} ETH) name{ domains.length === 1 ? '' : 's'} to claim deposit</div>)}
-            <ul>
+            <div className="App-domains">
               {
                 domains.map((d) => {
 
                   const displayName = d.name ? `${d.name}.eth` : `${d.labelhash && d.labelhash.slice(0,5)}...`
                   return(
-                    <li>
-                      <span>{displayName} has {d.value} ETH deposit</span>
+                    <>
+                      <span>{displayName} has {d.value.toFixed(2)} ETH deposit</span>
                       {
                         connected && isOwner && (
                           <button onClick={() => releaseDeed(provider, d.labelhash)} >
-                            Return
+                            Claim
                           </button>
                         )
                       }
-                    </li>      
+                    </>      
                   )
                 })
               }
-            </ul>
+            </div>
             <span style={{width:"60%", marginBottom:"1em", color:"yellow"}}>{message}</span>
             {domains.length > 0 && !isOwner ? (
               <span style={{width:"60%", marginBottom:"1em"}}>To return the deposit, you need to connect to the wallet which auctioned off the names</span>
