@@ -196,11 +196,11 @@ function App({
     deeds = accountData.account.deeds
   }
   const domains = deeds.map(deed => {
-    const label = labelData && labelData.account && labelData.account.domains.filter((domain) => domain.labelhash === deed?.name?.id )[0]
+    const label = labelData?.account && labelData.account.domains.filter((domain) => domain.labelhash === deed?.name?.id )[0]
     return {
       id:deed.id,
-      name:label && label.labelName,
-      labelhash:deed.name.id,
+      name:label?.labelName,
+      labelhash:deed.name?.id,
       value:(deed.value / Math.pow(10,18))
     }
   })
@@ -219,13 +219,12 @@ function App({
             <div className="App-domains">
               {
                 domains.map((d) => {
-
-                  const displayName = d.name ? `${d.name}.eth` : `${d.labelhash && d.labelhash.slice(0,5)}...`
+                  const displayName = !!(d.name) ? `${d.name}.eth` : d.labelhash ? (`${d.labelhash && d.labelhash.slice(0,5)}...`) : 'unknown'
                   return(
                     <>
                       <span>{displayName} has {d.value} ETH deposit</span>
                       {
-                        connected && isOwner ? (
+                        connected && isOwner && d.value > 0 ? (
                           <button onClick={() => releaseDeed(provider, d.labelhash)} >
                             Claim
                           </button>
