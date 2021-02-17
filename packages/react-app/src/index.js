@@ -10,19 +10,19 @@ import App from "./App";
 console.log({ENV:process.env})
 
 let stage, reclaimUri, ensUri, registryAddress, registrarAddress
-if (process.env.REACT_APP_STAGE === 'live'){
+// if (process.env.REACT_APP_STAGE === 'live'){
   stage = 'live'
   reclaimUri = "https://api.thegraph.com/subgraphs/name/makoto/ens-reclaim-deposit-subgraph"
   ensUri = "https://api.thegraph.com/subgraphs/name/ensdomains/ens"
   registrarAddress = '0x6090a6e47849629b7245dfa1ca21d94cd15878ef'
   registryAddress = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e'
-}else{
-  stage = 'dev'
-  reclaimUri = "http://127.0.0.1:8000/subgraphs/name/makoto/ens-reclaim-deposit-subgraph"
-  ensUri = "http://127.0.0.1:8000/subgraphs/name/graphprotocol/ens"
-  registrarAddress = '0xA47b9D846D03E74C736D650dfb23D085C773AFCE'
-  registryAddress = '0x7F90FA6F67Aa366D8ca17d36a1B2E5A06C647151'
-}
+// }else{
+//   stage = 'dev'
+//   reclaimUri = "http://127.0.0.1:8000/subgraphs/name/makoto/ens-reclaim-deposit-subgraph"
+//   ensUri = "http://127.0.0.1:8000/subgraphs/name/graphprotocol/ens"
+//   registrarAddress = '0xA47b9D846D03E74C736D650dfb23D085C773AFCE'
+//   registryAddress = '0x7F90FA6F67Aa366D8ca17d36a1B2E5A06C647151'
+// }
 
 const client = new ApolloClient({ uri: reclaimUri });
 const ensClient = new ApolloClient({ uri: ensUri });

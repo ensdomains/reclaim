@@ -78,14 +78,18 @@ function App({
     }
   }
   const lookupName = async(provider, label) => {
+    console.log('***lookupName1', {label})
     if (!label.match(/\.eth/)) {
       return false
     }
     let encoded, registry
     try{
       encoded = namehash.hash(label)
+      console.log('***lookupName2', {encoded, registryAddress})
       registry = new Contract(registryAddress, abis.registry, provider);
+      console.log('***lookupName3', {registry})
       const res = await registry.owner(encoded)
+      console.log('***lookupName4', {res})
       return res
     }catch(e){
       setMessage('Problem looking up the name')
@@ -103,7 +107,9 @@ function App({
       childDomain = label.replace(/\.eth$/, '')
       labelhash = '0x' + sha3(childDomain)
       registrar = new Contract(registrarAddress, abis.registrar, provider);
+      console.log('***lookupDeed1', {registrarAddress, labelhash})
       const [bid, deedAddress, registrationDate, value, highestBid] = await registrar.entries(labelhash)
+      console.log('***lookupDeed2', {label, bid, deedAddress, registrationDate, value, highestBid})
       if(bid > 0){
         deed = new Contract(deedAddress, abis.deed, provider);
         deedOwner = await deed.owner()
