@@ -190,7 +190,7 @@ function App({
     deeds = accountData.account.deeds
   }
   const domains = deeds.map(deed => {
-    const label = labelData && labelData.account && labelData.account.domains.filter((domain) => domain.labelhash === deed.name.id )[0]
+    const label = labelData && labelData.account && labelData.account.domains.filter((domain) => domain.labelhash === deed?.name?.id )[0]
     return {
       id:deed.id,
       name:label && label.labelName,
