@@ -38,7 +38,7 @@ const GET_ACCOUNTS = gql`
 query Account($account: String!){
   account(id:$account){
     id
-    deeds {
+    deeds(first:500) {
       id
       value
       name {
