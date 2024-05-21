@@ -1,6 +1,11 @@
 
 ## Project Structure
 
+### Setup
+
+- touch .env
+- Add REACT_APP_RECLAIM_GRAPH_URI and REACT_APP_ENS_GRAPH_URI (Get the API key and deployment url via https://thegraph.com/studio)
+
 #### `yarn react-app:start:live`
 
 Runs the React app in production mode pointing to mainnet<br>
