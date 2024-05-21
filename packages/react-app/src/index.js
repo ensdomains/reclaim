@@ -12,8 +12,8 @@ console.log({ENV:process.env})
 let stage, reclaimUri, ensUri, registryAddress, registrarAddress
 // if (process.env.REACT_APP_STAGE === 'live'){
   stage = 'live'
-  reclaimUri = process.env.RECLAIM_GRAPH_URI || "http://127.0.0.1:8000/subgraphs/name/makoto/ens-reclaim-deposit-subgraph"
-  ensUri = process.env.ENS_GRAPH_URI || "http://127.0.0.1:8000/subgraphs/name/graphprotocol/ens"
+  reclaimUri = process.env.REACT_APP_RECLAIM_GRAPH_URI || "http://127.0.0.1:8000/subgraphs/name/makoto/ens-reclaim-deposit-subgraph"
+  ensUri = process.env.REACT_APP_ENS_GRAPH_URI || "http://127.0.0.1:8000/subgraphs/name/graphprotocol/ens"
   registrarAddress = '0x6090a6e47849629b7245dfa1ca21d94cd15878ef'
   registryAddress = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e'
 // }else{
