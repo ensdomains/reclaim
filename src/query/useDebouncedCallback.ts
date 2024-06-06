@@ -1,10 +1,9 @@
 import { type DependencyList, useCallback, useRef } from "react";
 
-export default function useDebouncedCallback<T extends (...args: any[]) => ReturnType<T>>(
-  func: T,
-  wait?: number,
-  deps: DependencyList = [],
-): T {
+export default function useDebouncedCallback<
+  // biome-ignore lint/suspicious/noExplicitAny: intentional
+  T extends (...args: any[]) => ReturnType<T>,
+>(func: T, wait?: number, deps: DependencyList = []): T {
   const timerId = useRef<ReturnType<typeof setTimeout>>();
 
   return useCallback(

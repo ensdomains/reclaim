@@ -94,8 +94,7 @@ export const useSimpleSearch = (options: Options = {}) => {
     return () => {
       queryClient.removeQueries({ queryKey: ["simpleSearch"], exact: false });
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [queryClient]);
 
   const { mutate, isPending, ...rest } = useMutation({
     mutationFn: async (query: string) => {

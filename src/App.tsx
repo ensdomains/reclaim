@@ -55,7 +55,7 @@ function App() {
     if (searchValue) search.mutate(searchValue);
     else if (account.address) search.mutate(account.address);
     else search.mutate("");
-  }, [searchValue, account.address]);
+  }, [searchValue, search.mutate, account.address]);
 
   return (
     <div className="App">
@@ -97,10 +97,10 @@ function App() {
         </Card>
       )}
 
-      {singleDeed && (
+      {singleDeed && reference.name && (
         <DeedComponent
           id={singleDeed.id}
-          name={reference.name!}
+          name={reference.name}
           owner={singleDeed.deedOwner}
           value={singleDeed.value}
           isExact
