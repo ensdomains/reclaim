@@ -1,6 +1,6 @@
 import { Button, Card, Typography } from "@ensdomains/thorin";
 import { type Address, type Hex, encodeFunctionData, formatEther, getAddress } from "viem";
-import { useAccount, useEnsName, usePrepareTransactionRequest, useSendTransaction } from "wagmi";
+import { useAccount, useEnsName, usePrepareTransactionRequest, useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import { registrarAbi } from "./abis/registrar";
 import { REGISTRAR_ADDRESS } from "./constants";
 
@@ -31,7 +31,9 @@ export const DeedComponent = ({ id, name, value, owner, isExact }: Props) => {
     query: { enabled: false },
   });
 
-  const { sendTransaction, isPending } = useSendTransaction();
+  const { sendTransaction, isPending, data: hash } = useSendTransaction();
+
+  const { data: transactionReceipt } = useWaitForTransactionReceipt({ hash })
 
   const claim = () => preparedRequest && sendTransaction({ ...preparedRequest, to: REGISTRAR_ADDRESS });
 
@@ -39,24 +41,21 @@ export const DeedComponent = ({ id, name, value, owner, isExact }: Props) => {
 
   const isMatchingOwner = !!address && getAddress(owner) === getAddress(address);
 
-  const buttonLabel = (() => {
-    if (!isMatchingOwner) return "Cannot claim";
+  const buttonProps = (() => {
+    if (!isMatchingOwner) return { disabled: true, children: "Cannot claim" } as const;
 
-    if (isPrepareLoading) return "Preparing";
-    if (!preparedRequest) return "Prepare";
+    if (isPrepareLoading) return { disabled: true, children: "Preparing", loading: true } as const;
+    if (!preparedRequest) return { disabled: false, children: "Prepare", onClick: () => refetch(), colorStyle: "accentSecondary" } as const;
 
-    if (isPending) return "Claiming";
+    if (isPending) return { disabled: true, children: "Waiting for wallet", loading: true } as const;
+    if (transactionReceipt) {
+      if (transactionReceipt.status === 'reverted') return { disabled: false, children: "Try again", onClick: () => claim(), colorStyle: "redPrimary" } as const;
+      return { disabled: true, children: "Claimed" } as const;
+    }
+    if (hash) return { disabled: true, children: "Claiming", loading: true } as const;
 
-    return "Claim";
-  })();
-
-  const buttonIsDisabled = (() => {
-    if (!isMatchingOwner) return true;
-
-    if (isPrepareLoading) return true;
-
-    return isPending;
-  })();
+    return { disabled: false, children: "Claim", onClick: () => claim(), colorStyle: "accentPrimary" } as const;
+  })()
 
   return (
     <Card className="deed-card">
@@ -66,14 +65,7 @@ export const DeedComponent = ({ id, name, value, owner, isExact }: Props) => {
         <Typography>Owned by {primaryName || owner}</Typography>
       </div>
       <div>
-        <Button
-          disabled={buttonIsDisabled}
-          loading={isPrepareLoading || isPending}
-          onClick={() => (preparedRequest ? claim() : refetch())}
-          colorStyle={preparedRequest ? "accentPrimary" : "accentSecondary"}
-        >
-          {buttonLabel}
-        </Button>
+        <Button {...buttonProps} />
       </div>
     </Card>
   );
