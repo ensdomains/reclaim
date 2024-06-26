@@ -1,4 +1,4 @@
-import { encodeLabelhash, truncateFormat } from "@ensdomains/ensjs/utils";
+import { encodeLabelhash } from "@ensdomains/ensjs/utils";
 import type { QueryFunctionContext } from "@tanstack/react-query";
 import { GraphQLClient, gql } from "graphql-request";
 import { type Address, type Hex, isHash } from "viem";
