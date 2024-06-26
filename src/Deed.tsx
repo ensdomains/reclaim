@@ -1,3 +1,4 @@
+import { isEncodedLabelhash, truncateFormat } from "@ensdomains/ensjs/utils";
 import { Button, Card, Typography } from "@ensdomains/thorin";
 import { type Address, type Hex, encodeFunctionData, formatEther, getAddress } from "viem";
 import {
@@ -68,7 +69,7 @@ export const DeedComponent = ({ id, name, value, owner, isExact }: Props) => {
   return (
     <Card className="deed-card">
       <div className="deed-data">
-        <Typography fontVariant="headingThree">{label}</Typography>
+        <Typography fontVariant="headingThree">{isEncodedLabelhash(label) ? truncateFormat(label) : label}</Typography>
         <Typography>{formattedEth} ETH</Typography>
         <Typography>Owned by {primaryName || owner}</Typography>
       </div>

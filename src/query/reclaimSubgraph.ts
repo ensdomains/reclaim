@@ -83,7 +83,7 @@ export const getDeedsForAccountQueryFn =
     const decodedDeeds = account.deeds.map(({ id, value }, i) => ({
       id,
       value: BigInt(value),
-      name: isHash(decodedLabels[i]) ? truncateFormat(encodeLabelhash(decodedLabels[i])) : decodedLabels[i],
+      name: isHash(decodedLabels[i]) ? encodeLabelhash(decodedLabels[i]) : decodedLabels[i],
     }));
 
     return {
