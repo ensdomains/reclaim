@@ -1,5 +1,6 @@
 import { isEncodedLabelhash, truncateFormat } from "@ensdomains/ensjs/utils";
 import { Button, Card, Typography } from "@ensdomains/thorin";
+import { useQueryClient } from "@tanstack/react-query";
 import { type Address, type Hex, encodeFunctionData, formatEther, getAddress } from "viem";
 import {
   useAccount,
@@ -20,6 +21,7 @@ type Props = {
 };
 
 export const DeedComponent = ({ id, name, value, owner, isExact }: Props) => {
+  const queryClient = useQueryClient();
   const label = `${isExact ? "Exact Match: " : ""}${name}`;
   const formattedEth = formatEther(value);
   const { data: primaryName } = useEnsName({ address: owner });
@@ -38,6 +40,14 @@ export const DeedComponent = ({ id, name, value, owner, isExact }: Props) => {
     query: { enabled: false },
   });
 
+  const prepare = () => {
+    queryClient.resetQueries({
+      queryKey: ["prepareTransactionRequest"],
+      exact: false,
+    });
+    refetch();
+  };
+
   const { sendTransaction, isPending, data: hash } = useSendTransaction();
 
   const { data: transactionReceipt } = useWaitForTransactionReceipt({ hash });
@@ -53,7 +63,7 @@ export const DeedComponent = ({ id, name, value, owner, isExact }: Props) => {
 
     if (isPrepareLoading) return { disabled: true, children: "Preparing", loading: true } as const;
     if (!preparedRequest)
-      return { disabled: false, children: "Prepare", onClick: () => refetch(), colorStyle: "accentSecondary" } as const;
+      return { disabled: false, children: "Prepare", onClick: prepare, colorStyle: "accentSecondary" } as const;
 
     if (isPending) return { disabled: true, children: "Waiting for wallet", loading: true } as const;
     if (transactionReceipt) {
