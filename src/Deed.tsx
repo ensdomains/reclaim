@@ -62,15 +62,17 @@ export const DeedComponent = ({ id, name, value, owner, isExact }: Props) => {
     if (!isMatchingOwner) return { disabled: true, children: "Cannot claim" } as const;
 
     if (isPrepareLoading) return { disabled: true, children: "Preparing", loading: true } as const;
-    if (!preparedRequest)
-      return { disabled: false, children: "Prepare", onClick: prepare, colorStyle: "accentSecondary" } as const;
 
-    if (isPending) return { disabled: true, children: "Waiting for wallet", loading: true } as const;
     if (transactionReceipt) {
       if (transactionReceipt.status === "reverted")
         return { disabled: false, children: "Try again", onClick: () => claim(), colorStyle: "redPrimary" } as const;
       return { disabled: true, children: "Claimed" } as const;
     }
+
+    if (!preparedRequest)
+      return { disabled: false, children: "Prepare", onClick: prepare, colorStyle: "accentSecondary" } as const;
+
+    if (isPending) return { disabled: true, children: "Waiting for wallet", loading: true } as const;
     if (hash) return { disabled: true, children: "Claiming", loading: true } as const;
 
     return { disabled: false, children: "Claim", onClick: () => claim(), colorStyle: "accentPrimary" } as const;
