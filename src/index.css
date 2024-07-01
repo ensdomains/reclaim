@@ -1,0 +1,66 @@
+.App {
+  width: 100%;
+  min-height: 100vh;
+  max-width: 760px;
+  margin: 0 auto;
+
+  @supports (-webkit-touch-callout: none) {
+    min-height: -webkit-fill-available;
+  }
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  padding: 16px;
+  gap: 16px;
+}
+
+.App>header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.deed-card {
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.deed-data {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.account-deeds {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  text-align: center;
+  gap: 16px;
+}
+
+.deeds-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+footer {
+  text-align: center;
+
+  a {
+    color: hsl(216 100% 61%);
+    font-weight: bold;
+  }
+}
