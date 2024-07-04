@@ -1,27 +1,35 @@
 {
-  "name": "@project/monorepo",
-  "version": "1.0.0",
-  "keywords": [
-    "ethereum",
-    "react",
-    "workspaces",
-    "yarn"
-  ],
+  "name": "@ensdomains/reclaim",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "react-app:build": "source .env && REACT_APP_RECLAIM_GRAPH_URI=$REACT_APP_RECLAIM_GRAPH_URI REACT_APP_ENS_GRAPH_URI=$REACT_APP_ENS_GRAPH_URI REACT_APP_STAGE=live yarn workspace @project/react-app build",
-    "react-app:publish": "echo 'reclaim.ens.domains' > packages/react-app/build/CNAME && yarn gh-pages -d packages/react-app/build",
-    "react-app:deploy": "yarn react-app:build && yarn react-app:publish",
-    "react-app:start": "yarn workspace @project/react-app start",
-    "react-app:start:live": "source .env && REACT_APP_RECLAIM_GRAPH_URI=$REACT_APP_RECLAIM_GRAPH_URI REACT_APP_ENS_GRAPH_URI=$REACT_APP_ENS_GRAPH_URI REACT_APP_STAGE=live yarn workspace @project/react-app start"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "biome check .",
+    "preview": "vite preview"
   },
-  "workspaces": {
-    "nohoist": [
-      "**/@graphprotocol/graph-ts",
-      "**/@graphprotocol/graph-ts/**"
-    ],
-    "packages": [
-      "packages/*"
-    ]
+  "dependencies": {
+    "@ensdomains/ensjs": "^3.7.0",
+    "@ensdomains/thorin": "^0.6.50",
+    "@tanstack/react-query": "5.0.5",
+    "graphql": "^16.8.1",
+    "graphql-request": "^7.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-transition-state": "^1.1.5",
+    "styled-components": "^6.1.11",
+    "viem": "2.13.6",
+    "wagmi": "2.9.9"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.1.2",
+    "@types/react": "^18.2.23",
+    "@types/react-dom": "^18.2.8",
+    "@vitejs/plugin-react": "^4.1.0",
+    "@wagmi/cli": "2.1.8",
+    "buffer": "^6.0.3",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9"
   }
 }
