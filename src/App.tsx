@@ -7,7 +7,7 @@ import { DeedComponent } from "./Deed";
 import { lookupDeed } from "./query/lookupDeed";
 import { getDeedStatsQueryFn, getDeedsForAccountQueryFn } from "./query/reclaimSubgraph";
 import { useSimpleSearch } from "./query/useSimpleSearch";
-import { shortenAddress } from "./utils";
+import { createDisplayEth, shortenAddress } from "./utils";
 
 const getWarning = () => false;
 
@@ -135,11 +135,11 @@ function App() {
         <Typography>
           There are currently{" "}
           <Skeleton style={{ display: "inline-block" }} loading={isDeedStatsLoading}>
-            {deedStats?.numOfDeeds ?? "12345"}
+            <b>{deedStats?.numOfDeeds ?? "12345"}</b>
           </Skeleton>{" "}
           deeds holding{" "}
           <Skeleton style={{ display: "inline-block" }} loading={isDeedStatsLoading}>
-            {deedStats?.currentValue ? formatEther(deedStats.currentValue) : "0.0000"}
+            <b>{deedStats?.currentValue ? createDisplayEth(deedStats.currentValue) : "0.0000"}</b>
           </Skeleton>
           <br />
           To understand more about these unclaimed deposits,{" "}
