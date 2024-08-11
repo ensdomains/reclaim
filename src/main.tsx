@@ -10,6 +10,7 @@ import { WagmiProvider } from "wagmi";
 import { ThorinGlobalStyles, lightTheme } from "@ensdomains/thorin";
 import { ThemeProvider } from "styled-components";
 import App from "./App.tsx";
+import { Csp } from "./csp";
 import { config } from "./wagmi.ts";
 
 import "./index.css";
@@ -25,6 +26,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={lightTheme}>
           <ThorinGlobalStyles />
+          <Csp />
           <App />
         </ThemeProvider>
       </QueryClientProvider>
