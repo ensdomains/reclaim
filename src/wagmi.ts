@@ -2,13 +2,12 @@ import { type CheckedChainWithEns, addresses } from "@ensdomains/ensjs/contracts
 import { http, createConfig } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { injected } from "wagmi/connectors";
-
-const ENS_SUBGRAPH_API_KEY = "9ad5cff64d93ed2c33d1a57b3ec03ea9";
+import { ENS_SUBGRAPH_URI } from "./constants";
 
 const subgraphs = {
   1: {
     ens: {
-      url: `https://gateway-arbitrum.network.thegraph.com/api/${ENS_SUBGRAPH_API_KEY}/subgraphs/id/5XqPmWe6gjyrJtFn9cLy237i4cWw2j9HcUJEXsP5qGtH`,
+      url: ENS_SUBGRAPH_URI,
     },
   },
 };
@@ -28,7 +27,7 @@ export const config = createConfig({
   chains: [mainnetWithEns],
   connectors: [injected()],
   transports: {
-    [mainnet.id]: http(),
+    [mainnet.id]: http("https://web3.euc.li/v1/mainnet"),
   },
 });
 
