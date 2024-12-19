@@ -2,7 +2,7 @@ import { type CheckedChainWithEns, addresses } from "@ensdomains/ensjs/contracts
 import { http, createConfig } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { injected } from "wagmi/connectors";
-import { ENS_SUBGRAPH_URI } from "./constants";
+import { ENS_SUBGRAPH_URI, MAINNET_RPC_URL } from "./constants";
 
 const subgraphs = {
   1: {
@@ -27,7 +27,7 @@ export const config = createConfig({
   chains: [mainnetWithEns],
   connectors: [injected()],
   transports: {
-    [mainnet.id]: http("https://web3.euc.li/v1/mainnet"),
+    [mainnet.id]: http(MAINNET_RPC_URL),
   },
 });
 
