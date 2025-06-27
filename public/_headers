@@ -1,0 +1,12 @@
+/*
+  Content-Security-Policy:
+    default-src 'self';
+    worker-src  'self' blob:;
+    script-src  'self' https://static.cloudflareinsights.com 'wasm-unsafe-eval';
+    connect-src 'self' https:;
+    style-src   'self' 'unsafe-inline';
+    img-src     'self' data: https:;
+    object-src  'none';
+    base-uri    'self';
+    form-action 'self';
+    frame-ancestors 'self';
